@@ -1,0 +1,5 @@
+syntax: glob
+
+config.h
+*Makefile
+autom4te.cache

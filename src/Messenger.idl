@@ -12,3 +12,19 @@ module Messenger
     long count;
   };
 };
+
+
+module Sensors
+{
+  #pragma DCPS_DATA_TYPE "Sensors::Sensor"
+  #pragma DCPS_DATA_KEY "Sensors::Sensor my_uuid"
+
+  typedef string<16> uuid;
+  struct Sensor
+  {
+    uuid my_uuid;
+    float reading;
+    string comment;
+  };
+};
+
