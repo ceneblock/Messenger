@@ -24,17 +24,17 @@ project(*publisher) : dcpsexe, dcps_tcp {
   }
 }
 
-//project(*subscriber) : dcpsexe, dcps_tcp {
-//  requires += no_opendds_safety_profile
-//  exename   = subscriber
-//  after    += *publisher
-//
-//  TypeSupport_Files {
-//    Messenger.idl
-//  }
-//
-//  Source_Files {
-//    DataReaderListenerImpl.cpp
-//    Subscriber.cpp
-//  }
-//}
+project(*subscriber) : dcpsexe, dcps_tcp {
+  requires += no_opendds_safety_profile
+  exename   = subscriber
+  after    += *publisher
+
+  TypeSupport_Files {
+    Messenger.idl
+  }
+
+  Source_Files {
+    datareader_listener_impl.cpp
+    subscriber.cpp
+  }
+}

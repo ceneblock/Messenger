@@ -41,10 +41,10 @@ int main(int argc, char **argv)
 
     CORBA::String_var type_name = mts->get_type_name();    
     Topic_var topic = participant->create_topic ("Movie Discussion List",                                 
-                                                      type_name,                                 
-                                                      TOPIC_QOS_DEFAULT,                                 
-                                                      0,   // No listener required                                
-                                                      OpenDDS::DCPS::DEFAULT_STATUS_MASK);    
+                                                  type_name,                                 
+                                                  TOPIC_QOS_DEFAULT,                                 
+                                                  0,   // No listener required                                
+                                                  OpenDDS::DCPS::DEFAULT_STATUS_MASK);    
     
     if (!topic) 
     {
@@ -52,9 +52,9 @@ int main(int argc, char **argv)
       return EXIT_FAILURE;
     }
 
-    Publisher_var pub = participant->create_publisher(PUBLISHER_QOS_DEFAULT,                                    
-                                                           0,    // No listener required                                    
-                                                           OpenDDS::DCPS::DEFAULT_STATUS_MASK);    
+    Publisher_var pub = participant->create_publisher(PUBLISHER_QOS_DEFAULT,
+                                                      0,    // No listener required
+                                                      OpenDDS::DCPS::DEFAULT_STATUS_MASK);
     
     if (!pub) 
     {      
@@ -65,9 +65,9 @@ int main(int argc, char **argv)
 
     // Create the datawriter    
     DataWriter_var writer =  pub->create_datawriter(topic,                             
-                                                         DATAWRITER_QOS_DEFAULT,
-                                                         0,    // No listener required
-                                                         OpenDDS::DCPS::DEFAULT_STATUS_MASK);    
+                                                    DATAWRITER_QOS_DEFAULT,
+                                                    0,    // No listener required
+                                                    OpenDDS::DCPS::DEFAULT_STATUS_MASK);
     
     if (!writer) 
     {      
@@ -131,9 +131,22 @@ int main(int argc, char **argv)
      if(error != RETCODE_OK)
      {
        // Log or otherwise handle the error condition
-       return 1;
+       return EXIT_FAILURE;
      }
     }
+  
+    // Wait for samples to be acknowledged
+    Duration_t timeout = { 30, 0 };
+    if (message_writer->wait_for_acknowledgments(timeout) != RETCODE_OK) {
+      cerr << "wait_for_acknoledgments failed!\n";
+      return EXIT_FAILURE;
+    }
+
+    // Clean-up!
+    participant->delete_contained_entities();
+    dpf->delete_participant(participant);
+
+    TheServiceParticipant->shutdown();
   }
   catch(...)
   {

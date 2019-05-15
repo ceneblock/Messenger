@@ -14,7 +14,7 @@ clean-local:
 	-rm	MessengerC.cpp MessengerC.h 
 	-rm MessengerS.cpp MessengerS.h
 	-rm MessengerTypeSupport.idl MessengerTypeSupportC.inl MessengerC.inl
-	-rm publisher
+	-rm publisher subscriber
 
 MessengerTypeSupportImpl.cpp: Messenger.idl
 #opendds_idl -Wb,export_macro=MessengerCommon_Export -Wb,export_include=MessengerCommon_Export.h --export=MessengerCommon_Export Messenger.idl 
